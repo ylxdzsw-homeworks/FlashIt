@@ -7,25 +7,32 @@
 	init = (code,library) ->
 		end = no
 		Stack = []
-		stack_push code, library, -> end = yes
+		push_stack code, library, -> end = yes
 
 	next = (callback) ->
 		mission = Stack.pop()
-		console.log code_parse(mission.closure.code)
+		if is_atom mission.closure.code
+			obj = translate_atom mission.closure.code, mission.closure.env
+			callback(obj)
+
+		else
+			console.log 'no'
+		#console.log parse_code(mission.closure.code)
 		
 		
 
 	#tool functions
-	stack_push = (code,env,callback) ->
+	push_stack = (code,env,callback) ->
 		Stack.push {
 			closure: {
+				type: 'closure'
 				code: code,
 				env: env
 			},
 			callback: callback
 		}
 
-	code_parse = (code) ->
+	parse_code = (code) ->
 		parenthesis = counter()
 		finalAns = []
 		codetxt = ""
@@ -57,6 +64,20 @@
 		if parenthesis.get() isnt 0
 			throw new Error("parenthesis not matched!\nError code:" + code.trim())
 		return finalAns
+
+	translate_atom = (code,env) ->
+		codeToBeTranslate = code.trim()
+		if codeToBeTranslate is '#f'
+			return {type:'bool',value:false}
+		if not isNaN Number(codeToBeTranslate)
+			return {type:'number',value:Number codeToBeTranslate}
+		if env[codeToBeTranslate]?
+			return env[codeToBeTranslate]
+		{type:'undefined'}
+
+	is_atom = (code) ->
+		x = code.trim().split('')
+		' ' not in x and '(' not in x
 
 	counter = (x) ->
 		counts = x ? 0

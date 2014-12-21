@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Demo</title>
+	<style type="text/css">
+		#code {
+			height: 300px;
+		}
+		#anime-canvas {
+			height: 300px;
+			width: 400px;
+		}
+		#draw-button {
+			margin-top: 145px;
+		}
+		div {
+			float: left;
+		}
+		.border {
+			border: 1px solid;
+			border-color: rgb(169, 169, 169);
+		}
+	</style>
+	<script type="text/javascript" src="jquery.min.js"></script>
+	<script type="text/javascript" src="Flash It.js"></script>
+	<script type="text/javascript">
+	$(document).ready(function(){
+		$("#draw-button").click(function(){
+			code = $("#code").text()
+			console.log(code)
+		})
+	})
+	</script>
+</head>
+<body>
+	<h1>Demo</h1>
+	<div>
+		<textarea id="code" cols="50">(what (is the) fuck)</textarea>
+	</div>
+	<div>
+		<button id="draw-button">Draw!</button>
+	</div>
+	<div class="border">
+		<canvas id="anime-canvas"></canvas>
+	</div>
+</body>
+</html>
