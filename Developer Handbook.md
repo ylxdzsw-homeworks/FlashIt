@@ -34,7 +34,7 @@ eval函数描述如下：
 
 ### 闭包Closure
 {
-	arg: String
+	arg: Array
 	code: String
 	env: Zone
 }

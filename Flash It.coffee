@@ -18,32 +18,77 @@
 		else
 			slist = parse_code mission.closure.code
 			if slist[0] is 'lambda'
+				arglist = parse_code slist[1]
+				for i in arglist
+					if not is_atom i
+						throw new Error("in valiad argument name #{i}")
 				mission.callback 
 					type: 'closure',
-					arg: slist[1],
+					arg: arglist,
 					code: slist[2],
 					env: copy_env mission.closure.env
 			else if is_atom slist[0]
 				obj = translate_atom slist[0], mission.closure.env
 				if obj.type is 'function'
-					push_stack slist[1],copy_env(mission.closure.env),(x)->
-						mission.callback obj.fun(x)
+					if slist.length is 1
+						mission.callback obj.fun()
+					else
+						counts = 0
+						args = []
+						for i in slist[1..]
+							counts += 1
+							push_stack i,copy_env(mission.closure.env),(x)->
+								args.unshift x
+								if counts is 1
+									mission.callback obj.fun(args)
+								else
+									counts -= 1
 				else if obj.type is 'closure'
-					push_stack slist[1],copy_env(mission.closure.env),(x)->
-						push_stack obj.code,extend_env(obj.env,obj,arg,x),(x)->
-							mission.callback x
+					if slist.length is 1
+						push_stack obj.code,copy_env(obj.env),mission.callback
+					else
+						counts = 0
+						args = []
+						for i in slist[1..]
+							counts += 1
+							push_stack i,copy_env(mission.closure.env),(x)->
+								args.unshift x
+								if counts is 1
+									push_stack obj.code,extend_env(obj.env,obj.arg,args),mission.callback
+								else
+									counts -= 1
 				else
 					throw new Error("#{obj.type} is not a function")
 			else
-				console.log 'came here'
 				push_stack slist[0],copy_env(mission.closure.env),(obj)->
 					if obj.type is 'function'
-						push_stack slist[1],copy_env(mission.closure.env),(x)->
-							mission.callback obj.fun(x)
+						if slist.length is 1
+							mission.callback obj.fun()
+						else
+							counts = 0
+							args = []
+							for i in slist[1..]
+								counts += 1
+								push_stack i,copy_env(mission.closure.env),(x)->
+									args.unshift x
+									if counts is 1
+										mission.callback obj.fun(args)
+									else
+										counts -= 1
 					else if obj.type is 'closure'
-						push_stack slist[1],copy_env(mission.closure.env),(x)->
-							push_stack obj.code,extend_env(obj.env,obj.arg,x),(x)->
-								mission.callback x
+						if slist.length is 1
+							push_stack obj.code,copy_env(obj.env),mission.callback
+						else
+							counts = 0
+							args = []
+							for i in slist[1..]
+								counts += 1
+								push_stack i,copy_env(mission.closure.env),(x)->
+									args.unshift x
+									if counts is 1
+										push_stack obj.code,extend_env(obj.env,obj.arg,args),mission.callback
+									else
+										counts -= 1
 					else
 						throw new Error("#{obj.type} is not a function")
 		callback()
@@ -101,7 +146,11 @@
 
 	extend_env = (env,key,value) ->
 		x = copy_env env
-		x[key] = value
+		if not value.length? or value.length isnt key.length
+			throw new Error("unmatchde arg length")
+		else
+			for i in [0...key.length]
+				x[key[i]] = value[i]
 		return x
 				
 	translate_atom = (code,env) ->

@@ -37,7 +37,10 @@
 		baseenv = {
 			'+': {
 				type: 'function',
-				fun: function(a){return {type:'number',value:a.value+1}}
+				fun: function(a){
+					var x = a[0].value + a[1].value
+					return {type:'number',value:x}
+				}
 			},
 			'-': {
 				type: 'function',
