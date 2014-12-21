@@ -10,27 +10,48 @@
 		push_stack code, library, -> end = yes
 
 	next = (callback) ->
+		callback = callback ? (x)->console.log x
 		mission = Stack.pop()
 		if is_atom mission.closure.code
 			obj = translate_atom mission.closure.code, mission.closure.env
-			callback(obj)
-
+			mission.callback(obj)
 		else
-			console.log 'no'
-		#console.log parse_code(mission.closure.code)
+			slist = parse_code mission.closure.code
+			if slist[0] is 'lambda'
+				callback 
+					type: 'closure',
+					arg: slist[1],
+					code: slist[2],
+					env: copy_env mission.closure.env
+			else if is_atom slist[0]
+				obj = translate_atom slist[0], mission.closure.env
+				console.log(obj)
+				if obj.type is 'function'
+					push_stack slist[1],copy_env(mission.closure.env),(x)->
+						console.log x
+						mission.callback obj.fun(x)
+				else if obj.type is 'closure'
+					push_stack slist[1],copy_env(mission.closure.env),(x)->
+						push_stack obj.code,extend_env(obj.env,obj,arg,x),(x)->
+							mission.callback x
+				else
+					throw new Error("#{obj.type} is not a function")
+			else 
+				callback()
+		callback()
+
 		
-		
+	hasNext = () ->
+		not end
 
 	#tool functions
 	push_stack = (code,env,callback) ->
-		Stack.push {
-			closure: {
+		Stack.push
+			closure:
 				type: 'closure'
-				code: code,
+				code: code
 				env: env
-			},
 			callback: callback
-		}
 
 	parse_code = (code) ->
 		parenthesis = counter()
@@ -65,6 +86,16 @@
 			throw new Error("parenthesis not matched!\nError code:" + code.trim())
 		return finalAns
 
+	copy_env = (x) ->
+		y = {}
+		y[k] = v for k, v of x
+		return y
+
+	extend_env = (env,key,value) ->
+		x = copy_env env
+		x[key] = value
+		return x
+				
 	translate_atom = (code,env) ->
 		codeToBeTranslate = code.trim()
 		if codeToBeTranslate is '#f'
@@ -97,6 +128,7 @@
 	#returns
 	{
 		init: init,
-		next: next
+		next: next,
+		hasNext: hasNext
 	}
 

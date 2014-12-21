@@ -27,11 +27,29 @@
 	<script type="text/javascript">
 	$(document).ready(function(){
 		$("#draw-button").click(function(){
-			code = $("#code").text()
-			console.log(code)
+			code = $("#code").val()
+			x.init(code,baseenv);
 		})
 	})
 	</script>
+	<script type="text/javascript">
+		x = flashit();
+		baseenv = {
+			'+': {
+				type: 'function',
+				fun: function(a){return {type:'number',value:a.value+1}}
+			},
+			'-': {
+				type: 'function',
+				fun: function(a){return {type:'number',value:a.value-1}}
+			},
+			'log': {
+				type: 'function',
+				fun: function(a){console.log(a)}
+			}
+		};
+	</script>
+
 </head>
 <body>
 	<h1>Demo</h1>
