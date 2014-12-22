@@ -147,6 +147,8 @@
 	extend_env = (env,key,value) ->
 		x = copy_env env
 		if not value.length? or value.length isnt key.length
+			console.log value
+			console.log key
 			throw new Error("unmatchde arg length")
 		else
 			for i in [0...key.length]
