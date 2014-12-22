@@ -38,6 +38,15 @@
 					else
 						push_stack slist[2],copy_env(mission.closure.env),(x)->
 							mission.callback x
+			else if slist[0] is 'begin'
+				counts = 0
+				for i in slist[1..].reverse()
+					counts += 1
+					push_stack i,copy_env(mission.closure.env),(x)->
+						if counts is 1
+							mission.callback x
+						else
+							counts -= 1
 			else if is_atom slist[0]
 				obj = translate_atom slist[0], mission.closure.env
 				if obj.type is 'function'
@@ -102,9 +111,8 @@
 										counts -= 1
 					else
 						throw new Error("#{obj.type} is not a function")
-		callback()
+		callback('execute finished')
 
-		
 	hasNext = () ->
 		not end
 
