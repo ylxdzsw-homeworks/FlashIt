@@ -1,0 +1,16 @@
+;;caculate distance
+(begin
+	(define square_sum 
+		(lambda (x y)
+			(+ (* x x) (* y y))))
+	(define distance
+		(lambda (x y)
+			(sqrt 
+				(square_sum 
+					(- (px x) (px y)) 
+					(- (py x) (py y))))))
+	(print 
+		(distance 
+			(p 1 1)
+			(p 0 0)))
+)

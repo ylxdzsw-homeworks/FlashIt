@@ -24,33 +24,22 @@
 	</style>
 	<script type="text/javascript" src="jquery.min.js"></script>
 	<script type="text/javascript" src="Flash It.js"></script>
+	<script type="text/javascript" src="built-in functions.js"></script>
 	<script type="text/javascript">
 	$(document).ready(function(){
 		$("#draw-button").click(function(){
 			code = $("#code").val()
-			x.init(code,baseenv);
+			x.init(code,[base(function(x){console.log(x)}),math(),graph()]);
+		})
+		$("#run").click(function(){
+			while(x.hasNext()){
+				x.next()
+			}
 		})
 	})
 	</script>
 	<script type="text/javascript">
 		x = flashit();
-		baseenv = {
-			'+': {
-				type: 'function',
-				fun: function(a){
-					var x = a[0].value + a[1].value
-					return {type:'number',value:x}
-				}
-			},
-			'-': {
-				type: 'function',
-				fun: function(a){return {type:'number',value:a.value-1}}
-			},
-			'log': {
-				type: 'function',
-				fun: function(a){console.log(a)}
-			}
-		};
 	</script>
 
 </head>
@@ -61,6 +50,7 @@
 	</div>
 	<div>
 		<button id="draw-button">Draw!</button>
+		<button id="run">run</button>
 	</div>
 	<div class="border">
 		<canvas id="anime-canvas"></canvas>

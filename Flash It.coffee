@@ -7,11 +7,16 @@
 	init = (code,library) ->
 		end = no
 		Stack = []
-		push_stack code, library, -> end = yes
+		init_env = {}
+		for i in library
+			for k, v of i
+				init_env[k] = v
+		push_stack code, init_env, -> end = yes
 
 	next = (callback) ->
 		callback = callback ? (x)->console.log x
 		mission = Stack.pop()
+		console.log mission.closure.code
 		if is_atom mission.closure.code
 			obj = translate_atom mission.closure.code, mission.closure.env
 			mission.callback(obj)
@@ -42,11 +47,15 @@
 				counts = 0
 				for i in slist[1..].reverse()
 					counts += 1
-					push_stack i,copy_env(mission.closure.env),(x)->
+					push_stack i,mission.closure.env,(x)-> #这里不需要拷贝作用域
 						if counts is 1
 							mission.callback x
 						else
 							counts -= 1
+			else if slist[0] is 'define'
+				push_stack slist[2],copy_env(mission.closure.env),(x)->
+					mission.closure.env[slist[1]] = x
+					mission.callback {type:undefined}
 			else if is_atom slist[0]
 				obj = translate_atom slist[0], mission.closure.env
 				if obj.type is 'function'
