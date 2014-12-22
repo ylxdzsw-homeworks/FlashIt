@@ -1,8 +1,9 @@
-@base = (logger) ->
+@stdlib = (paper) ->
+	#base functions
 	'print':
 		type: 'function'
 		fun: (x) ->
-			logger x
+			console.log x
 	'list':
 		type: 'function'
 		fun: (x) ->
@@ -26,8 +27,7 @@
 		type: 'function'
 		fun: (x) ->
 			x[0].value[1]
-
-@math = ->
+	#math functions
 	'+':
 		type: 'function'
 		fun: (x) ->
@@ -71,8 +71,7 @@
 		fun: (x)->
 			type: 'number'
 			value: Math.sqrt x[0].value
-
-@graph = ->
+	#graph functions
 	'p':
 		type: 'function'
 		fun: (x) ->
@@ -88,3 +87,4 @@
 		fun: (x) ->
 			type: 'number'
 			value: x[0].value[1]
+

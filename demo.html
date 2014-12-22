@@ -27,30 +27,31 @@
 	<script type="text/javascript" src="built-in functions.js"></script>
 	<script type="text/javascript">
 	$(document).ready(function(){
-		$("#draw-button").click(function(){
+		paper.setup($('#anime-canvas'));
+		$("#read-button").click(function(){
 			code = $("#code").val()
 			x.init(code,[base(function(x){console.log(x)}),math(),graph()]);
 		})
-		$("#run").click(function(){
+		$("#full-speed-button").click(function(){
+			var counts = 0
 			while(x.hasNext()){
-				x.next()
+				x.next(function(){counts += 1});
 			}
+			console.log("finished by "+counts+" times caculate");
 		})
 	})
 	</script>
-	<script type="text/javascript">
-		x = flashit();
-	</script>
-
 </head>
 <body>
 	<h1>Demo</h1>
 	<div>
-		<textarea id="code" cols="50">(what (is the) fuck)</textarea>
+		<textarea id="code" cols="50"></textarea>
 	</div>
 	<div>
-		<button id="draw-button">Draw!</button>
-		<button id="run">run</button>
+		<button id="read-button">Read</button>
+		<button id="full-speed-button">Full Speed</button>
+		<button id="by-frame-button">By Frame</button>
+		<button id="by-step-button">By Step</button>
 	</div>
 	<div class="border">
 		<canvas id="anime-canvas"></canvas>
