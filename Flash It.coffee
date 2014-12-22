@@ -27,6 +27,17 @@
 					arg: arglist,
 					code: slist[2],
 					env: copy_env mission.closure.env
+			else if slist[0] is 'if'
+				push_stack slist[1],copy_env(mission.closure.env),(x)->
+					if x.value is false
+						if not slist[3]?
+							mission.callback {type:undefined}
+						else
+							push_stack slist[3],copy_env(mission.closure.env),(x)->
+								mission.callback x
+					else
+						push_stack slist[2],copy_env(mission.closure.env),(x)->
+							mission.callback x
 			else if is_atom slist[0]
 				obj = translate_atom slist[0], mission.closure.env
 				if obj.type is 'function'
