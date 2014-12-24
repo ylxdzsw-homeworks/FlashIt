@@ -16,7 +16,7 @@
 	next = (callback) ->
 		callback = callback ? (x)->console.log x
 		mission = Stack.pop()
-		console.log mission.closure.code
+		console.log mission.closure
 		if is_atom mission.closure.code
 			obj = translate_atom mission.closure.code, mission.closure.env
 			mission.callback(obj)
@@ -27,22 +27,22 @@
 				for i in arglist
 					if not is_atom i
 						throw new Error("in valiad argument name #{i}")
-				mission.callback 
+				foo = 
 					type: 'closure',
 					arg: arglist,
 					code: slist[2],
 					env: copy_env mission.closure.env
+				foo.env.self = foo
+				mission.callback foo
 			else if slist[0] is 'if'
 				push_stack slist[1],copy_env(mission.closure.env),(x)->
 					if x.value is false
 						if not slist[3]?
 							mission.callback {type:undefined}
 						else
-							push_stack slist[3],copy_env(mission.closure.env),(x)->
-								mission.callback x
+							push_stack slist[3],copy_env(mission.closure.env),mission.callback
 					else
-						push_stack slist[2],copy_env(mission.closure.env),(x)->
-							mission.callback x
+						push_stack slist[2],copy_env(mission.closure.env),mission.callback
 			else if slist[0] is 'begin'
 				counts = 0
 				for i in slist[1..].reverse()
@@ -216,6 +216,7 @@
 	{
 		init: init,
 		next: next,
-		hasNext: hasNext
+		hasNext: hasNext,
+		showStack: -> console.log Stack
 	}
 

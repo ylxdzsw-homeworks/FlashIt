@@ -27,6 +27,15 @@
 		type: 'function'
 		fun: (x) ->
 			x[0].value[1]
+	'=':
+		type: 'function'
+		fun: (x) ->
+			if x[0].type is x[1].type and x[0].value is x[1].value
+				type: 'bool'
+				value: true
+			else
+				type: 'bool'
+				value: false
 	#math functions
 	'+':
 		type: 'function'

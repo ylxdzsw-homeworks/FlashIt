@@ -25,12 +25,14 @@
 	<script type="text/javascript" src="jquery.min.js"></script>
 	<script type="text/javascript" src="Flash It.js"></script>
 	<script type="text/javascript" src="built-in functions.js"></script>
+	<script type="text/javascript" src="paper-full.min.js"></script>
 	<script type="text/javascript">
+	x = flashit();
 	$(document).ready(function(){
-		paper.setup($('#anime-canvas'));
+		paper.setup('anime-canvas');
 		$("#read-button").click(function(){
 			code = $("#code").val()
-			x.init(code,[base(function(x){console.log(x)}),math(),graph()]);
+			x.init(code,[stdlib(paper)]);
 		})
 		$("#full-speed-button").click(function(){
 			var counts = 0
