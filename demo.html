@@ -27,35 +27,80 @@
 	<script type="text/javascript" src="built-in functions.js"></script>
 	<script type="text/javascript">
 	x = flashit();
-
-
 	$(document).ready(function(){
-		$("#full-speed-button").click(function(){
-			var counts = 0;
-			var code = $("#code").val();
-			var ctx = document.getElementById('anime-canvas').getContext('2d');
-			var frameEnd = false;
+		var ctx = document.getElementById('anime-canvas').getContext('2d');
+		var counts = 0;
+		var code = "";
+		var frameEnd = false;
+		var pause = false;
+		$("#read-button").click(function(){
+			counts = 0;
+			code = $("#code").val();
+			frameEnd = false;
 			x.init(code,[stdlib(ctx,{
 				width:400,
 				height:300
 			},function(){
 				frameEnd = true;
 			})]);
+		});
+		$("#pause-button").click(function(){
+			pause = true;
+		});
+		$("#full-speed-button").click(function(){
 			goes = function(){
 				if(!x.hasNext()){
-					console.log("finished after "+counts+" times caculate");
+					console.log("anime finished after "+counts+" times caculate");
 				}else{
 					if(frameEnd){
 						frameEnd = false;
+						setTimeout(goes,80);
 					}else{
-						x.next();
-						counts += 1;
+						if(pause){
+							pause = false;
+						}else{
+							x.next();
+							counts += 1;
+							goes();
+						}
 					}
-					setTimeout(goes,0);
 				}
 			}
 			goes();
-		})
+		});
+		$("#by-frame-button").click(function(){
+			goes = function(){
+				if(!x.hasNext()){
+					console.log("anime finished after "+counts+" times caculate");
+				}else{
+					if(frameEnd){
+						frameEnd = false;
+						console.log("a frame finished")
+					}else{
+						if(pause){
+							pause = false;
+						}else{
+							x.next();
+							counts += 1;
+							goes();
+						}
+					}
+				}
+			}
+			goes();
+		});
+		$("#by-step-button").click(function(){
+			goes = function(){
+				if(!x.hasNext()){
+					console.log("anime finished after "+counts+" times caculate");
+				}else{
+					console.log("one step finished");
+					x.next();
+					counts += 1;
+				}
+			}
+			goes();
+		});
 	})
 	</script>
 </head>
@@ -65,9 +110,11 @@
 		<textarea id="code" cols="50"></textarea>
 	</div>
 	<div>
+		<button id="read-button">read</button>
 		<button id="full-speed-button">Full Speed</button>
 		<button id="by-frame-button">By Frame</button>
 		<button id="by-step-button">By Step</button>
+		<button id="pause-button">pause</button>
 	</div>
 	<div class="border">
 		<canvas id="anime-canvas"></canvas>
