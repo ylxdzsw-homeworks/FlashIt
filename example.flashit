@@ -29,3 +29,22 @@
 	(print
 		(fact-sum 5))
 )
+
+;;list
+(begin
+	(define fuck
+		(list 1 2))
+	(print (++ fuck fuck 3))
+)
+
+;;a cross shifting
+(define cross 
+	(+
+		(line (p 0 0)
+			(p 50 50))
+		(line (p 50 0)
+			(p 0 50))
+		(circle (p 25 25) 25)))
+ 	(place cross (p 50 50)) 
+ 	(loop 100 (+ (shift cross right) (shift cross up))) 
+ 	(erase cross)

@@ -1,4 +1,9 @@
 @stdlib = (paper) ->
+	#settings
+	rx = (x)-> x * paper.view.viewSize._width
+	ry = (y)-> y * paper.view.viewSize._height
+
+
 	#base functions
 	'print':
 		type: 'function'
@@ -36,6 +41,19 @@
 			else
 				type: 'bool'
 				value: false
+	'++':
+		type: 'function'
+		fun: (x) ->
+			L = []
+			x.map (x) ->
+				if x.type is 'list'
+					L = L.concat x.value
+				else
+					L.push x
+			type: 'list'
+			value: L
+
+
 	#math functions
 	'+':
 		type: 'function'
@@ -85,15 +103,18 @@
 		type: 'function'
 		fun: (x) ->
 			type: 'point'
-			value: [x[0].value,x[1].value]
+			value: new paper.Point(rx(x[0].value),ry(x[1].value))
 	'px':
 		type: 'function'
 		fun: (x) ->
 			type: 'number'
-			value: x[0].value[0]
+			value: x[0].value.x
 	'py':
 		type: 'function'
 		fun: (x) ->
 			type: 'number'
-			value: x[0].value[1]
+			value: x[0].value.y
+	
+
+
 
