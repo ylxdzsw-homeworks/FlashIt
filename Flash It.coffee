@@ -13,10 +13,9 @@
 				init_env[k] = v
 		push_stack code, init_env, -> end = yes
 
-	next = (callback) ->
-		callback = callback ? (x)->console.log x
+	next = ->
 		mission = Stack.pop()
-		console.log mission.closure
+		#console.log mission.closure
 		if is_atom mission.closure.code
 			obj = translate_atom mission.closure.code, mission.closure.env
 			mission.callback(obj)
@@ -120,7 +119,6 @@
 										counts -= 1
 					else
 						throw new Error("#{obj.type} is not a function")
-		callback('execute finished')
 
 	hasNext = () ->
 		not end

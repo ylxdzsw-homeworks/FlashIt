@@ -25,20 +25,36 @@
 	<script type="text/javascript" src="jquery.min.js"></script>
 	<script type="text/javascript" src="Flash It.js"></script>
 	<script type="text/javascript" src="built-in functions.js"></script>
-	<script type="text/javascript" src="paper-full.min.js"></script>
 	<script type="text/javascript">
 	x = flashit();
+
+
 	$(document).ready(function(){
-		$("#read-button").click(function(){
-			code = $("#code").val()
-			x.init(code,[stdlib(document.getElementById('anime-canvas').getContext('2d'),{width:400,height:300})]);
-		})
 		$("#full-speed-button").click(function(){
-			var counts = 0
-			while(x.hasNext()){
-				x.next(function(){counts += 1});
+			var counts = 0;
+			var code = $("#code").val();
+			var ctx = document.getElementById('anime-canvas').getContext('2d');
+			var frameEnd = false;
+			x.init(code,[stdlib(ctx,{
+				width:400,
+				height:300
+			},function(){
+				frameEnd = true;
+			})]);
+			goes = function(){
+				if(!x.hasNext()){
+					console.log("finished after "+counts+" times caculate");
+				}else{
+					if(frameEnd){
+						frameEnd = false;
+					}else{
+						x.next();
+						counts += 1;
+					}
+					setTimeout(goes,0);
+				}
 			}
-			console.log("finished by "+counts+" times caculate");
+			goes();
 		})
 	})
 	</script>
@@ -49,7 +65,6 @@
 		<textarea id="code" cols="50"></textarea>
 	</div>
 	<div>
-		<button id="read-button">Read</button>
 		<button id="full-speed-button">Full Speed</button>
 		<button id="by-frame-button">By Frame</button>
 		<button id="by-step-button">By Step</button>

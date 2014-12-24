@@ -1,5 +1,7 @@
-@stdlib = (canvas,size) ->
+@stdlib = (canvas,size,onframe) ->
 	#settings
+	onframe ?= -> console.log("one frame goes by")
+
 	rx = (x)-> x * size.width / 100
 	ry = (y)-> y * size.height / 100
 	ux = (x)-> x / size.width * 100
@@ -157,8 +159,10 @@
 	'draw':
 		type: 'function'
 		fun: (x) ->
+			canvas.clearRect 0,0,size.width,size.height
 			storyboard.map (x) ->
 				x.draw()
+			onframe() if onframe?
 			type: 'undefined'
 
 
