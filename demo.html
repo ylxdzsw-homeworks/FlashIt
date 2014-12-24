@@ -29,10 +29,9 @@
 	<script type="text/javascript">
 	x = flashit();
 	$(document).ready(function(){
-		paper.setup('anime-canvas');
 		$("#read-button").click(function(){
 			code = $("#code").val()
-			x.init(code,[stdlib(paper)]);
+			x.init(code,[stdlib(document.getElementById('anime-canvas').getContext('2d'),{width:400,height:300})]);
 		})
 		$("#full-speed-button").click(function(){
 			var counts = 0

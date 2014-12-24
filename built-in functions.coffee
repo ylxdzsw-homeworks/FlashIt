@@ -1,8 +1,11 @@
-@stdlib = (paper) ->
+@stdlib = (canvas,size) ->
 	#settings
-	rx = (x)-> x * paper.view.viewSize._width
-	ry = (y)-> y * paper.view.viewSize._height
-
+	rx = (x)-> x * size.width / 100
+	ry = (y)-> y * size.height / 100
+	ux = (x)-> x / size.width * 100
+	uy = (y)-> y / size.height * 100
+	
+	storyboard = []
 
 	#base functions
 	'print':
@@ -99,11 +102,20 @@
 			type: 'number'
 			value: Math.sqrt x[0].value
 	#graph functions
+	'g':
+		type: 'function'
+		fun: (x) ->
+			type: 'graph'
+			value: x.map (x) -> x.value
+				.reduce (x,y) -> x.concat(y)
+
 	'p':
 		type: 'function'
 		fun: (x) ->
 			type: 'point'
-			value: new paper.Point(rx(x[0].value),ry(x[1].value))
+			value: 
+				x: x[0].value
+				y: x[1].value
 	'px':
 		type: 'function'
 		fun: (x) ->
@@ -114,6 +126,48 @@
 		fun: (x) ->
 			type: 'number'
 			value: x[0].value.y
+	'line':
+		type: 'function'
+		fun: (x) ->
+			type: 'graph'
+			value: [
+				pos: []
+				draw: ->
+					if @pos.length
+						canvas.beginPath()
+						canvas.moveTo rx(@pos[0]+x[0].value.x),ry(@pos[1]+x[0].value.y)
+						canvas.lineTo rx(@pos[0]+x[1].value.x),ry(@pos[1]+x[1].value.y)
+						canvas.closePath()
+						canvas.stroke()
+			]
+	'place':
+		type: 'function'
+		fun: (x) ->
+			x[0].value.map (f) ->
+				f.pos = [x[1].value.x,x[1].value.y]
+				storyboard.push f
+			type: 'undefined'
+	'shift':
+		type: 'function'
+		fun: (x) ->
+			x[0].value.map (f) ->
+				f.pos[0] += x[1].value.x
+				f.pos[1] += x[1].value.y				
+			type: 'undefined'
+	'draw':
+		type: 'function'
+		fun: (x) ->
+			storyboard.map (x) ->
+				x.draw()
+			type: 'undefined'
+
+
+
+
+
+
+
+
 	
 
 

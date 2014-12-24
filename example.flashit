@@ -32,10 +32,38 @@
 
 ;;list
 (begin
-	(define fuck
+	(define foo
 		(list 1 2))
-	(print (++ fuck fuck 3))
+	(print (++ foo foo 3))
 )
+
+;;looper
+(define loop
+	(lambda (n f)
+		(if (= n 0)
+			1
+			(begin
+				(f)
+				(self (- n 1) f)))))
+
+;;static drawing
+(begin 
+	(place 
+		(line
+			(p 10 10)
+			(p 60 60))
+		(p 10 10))
+	(draw)
+)
+
+;;anime
+(loop 6000
+	(place 
+		(line 
+			(p 10 10)
+			(p 20 20)) 
+		(p 1 1))
+	(shift (p 0.1 0.1)))
 
 ;;a cross shifting
 (define cross 
