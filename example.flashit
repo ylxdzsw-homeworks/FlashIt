@@ -70,20 +70,20 @@
 				(begin
 					(f)
 					(self (- n 1) f)))))
-	(define aline
-		(line 
-			(p 10 10)
-			(p 80 80)))
-	(place aline (p 10 10))
-	(place
-		(circle
-			(p 45 45)
-			45)
-		(p 10 10))
+	(define futiao
+		(g 
+			(line (p 10 10) (p 80 80))
+			(line (p 10 80) (p 80 10))))
+	(define kuang
+		(circle (p 45 45) 50))
+	(define lunzi
+		(g futiao kuang))
+	(place lunzi (p 10 10))
 	(loop 60
 		(lambda ()
 			(begin
-				(rotate aline (* PI 0.02))
+				(rotate futiao (* PI 0.02))
+				(shift lunzi (p 2 0))
 				(draw))))
 )
 
