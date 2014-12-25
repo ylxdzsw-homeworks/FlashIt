@@ -56,7 +56,7 @@
 	(place
 		(circle
 			(p 10 10)
-			5)
+			15)
 		(p 5 5))
 	(draw)
 )
@@ -73,8 +73,13 @@
 	(define aline
 		(line 
 			(p 10 10)
-			(p 20 20)))
+			(p 80 80)))
 	(place aline (p 10 10))
+	(place
+		(circle
+			(p 45 45)
+			45)
+		(p 10 10))
 	(loop 60
 		(lambda ()
 			(begin

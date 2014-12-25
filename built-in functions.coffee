@@ -1,12 +1,6 @@
 @stdlib = (canvas,size,onframe) ->
 	#settings
-	onframe ?= -> console.log("one frame goes by")
-
-	rx = (x)-> x #* size.width / 100
-	ry = (y)-> y #* size.height / 100
-	ux = (x)-> x #/ size.width * 100
-	uy = (y)-> y #/ size.height * 100
-	
+	onframe ?= -> console.log("one frame gone by")
 	storyboard = []
 
 	#base functions
@@ -139,14 +133,11 @@
 				draw: ->
 					if @pos.length
 						canvas.save()
-						canvas.translate(
-							rx @pos[0]+(x[0].value.x+x[1].value.x)/2
-							ry @pos[1]+(x[0].value.y+x[1].value.y)/2							
-						)
+						canvas.translate @pos[0]+(x[0].value.x+x[1].value.x)/2,@pos[1]+(x[0].value.y+x[1].value.y)/2
 						canvas.rotate @rotation.angle
 						canvas.beginPath()
-						canvas.moveTo rx((x[0].value.x-x[1].value.x)/2),ry((x[0].value.y-x[1].value.y)/2)
-						canvas.lineTo rx((x[1].value.x-x[0].value.x)/2),ry((x[1].value.y-x[0].value.y)/2)
+						canvas.moveTo (x[0].value.x-x[1].value.x)/2,(x[0].value.y-x[1].value.y)/2
+						canvas.lineTo (x[1].value.x-x[0].value.x)/2,(x[1].value.y-x[0].value.y)/2
 						canvas.closePath()
 						canvas.stroke()
 						canvas.restore()
@@ -162,10 +153,7 @@
 				draw: ->
 					if @pos.length
 						canvas.save()
-						canvas.translate(
-							rx @pos[0]+x[0].value.x
-							ry @pos[1]+x[0].value.y							
-						)
+						canvas.translate @pos[0]+x[0].value.x,@pos[1]+x[0].value.y
 						canvas.rotate @rotation.angle
 						canvas.beginPath()
 						canvas.arc 0,0,x[1].value,0,2*Math.PI
