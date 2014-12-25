@@ -87,6 +87,27 @@
 				(draw))))
 )
 
+;;another example
+(begin 
+	(define loop
+		(lambda (n f)
+			(if (= n 0)
+				1
+				(begin
+					(f)
+					(self (- n 1) f)))))
+	(define x
+		(g 
+			(line (p 10 10) (p 80 80))
+			(line (p 10 80) (p 80 10))))
+	(place x (p 10 10))
+	(loop 60
+		(lambda ()
+			(begin
+				(rotate x (* PI 0.02) (p 10 10))
+				(draw))))
+)
+
 ;;a cross shifting
 (define cross 
 	(+

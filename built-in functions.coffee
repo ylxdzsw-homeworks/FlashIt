@@ -130,11 +130,14 @@
 				pos: []
 				rotation: 
 					angle: 0
+					center: [0,0]
 				draw: ->
 					if @pos.length
 						canvas.save()
 						canvas.translate @pos[0]+(x[0].value.x+x[1].value.x)/2,@pos[1]+(x[0].value.y+x[1].value.y)/2
+						canvas.translate @rotation.center[0],@rotation.center[1]
 						canvas.rotate @rotation.angle
+						canvas.translate -@rotation.center[0],-@rotation.center[1]
 						canvas.beginPath()
 						canvas.moveTo (x[0].value.x-x[1].value.x)/2,(x[0].value.y-x[1].value.y)/2
 						canvas.lineTo (x[1].value.x-x[0].value.x)/2,(x[1].value.y-x[0].value.y)/2
@@ -150,11 +153,14 @@
 				pos: []
 				rotation: 
 					angle: 0
+					center: [0,0]
 				draw: ->
 					if @pos.length
 						canvas.save()
 						canvas.translate @pos[0]+x[0].value.x,@pos[1]+x[0].value.y
+						canvas.translate @rotation.center[0],@rotation.center[1]
 						canvas.rotate @rotation.angle
+						canvas.translate -@rotation.center[0],-@rotation.center[1]
 						canvas.beginPath()
 						canvas.arc 0,0,x[1].value,0,2*Math.PI
 						canvas.closePath()
@@ -180,6 +186,8 @@
 		fun: (x) ->
 			x[0].value.map (f) ->
 				f.rotation.angle += x[1].value
+				if x[2]?
+					f.rotation.center = [x[2].value.x,x[2].value.y]
 			type: 'undefined'
 	'draw':
 		type: 'function'
