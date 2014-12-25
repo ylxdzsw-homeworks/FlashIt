@@ -73,9 +73,10 @@
 	(loop 60
 		(lambda ()
 			(begin
-				(shift aline (p 0.4 0))
+				(rotate aline (* PI 0.02))
 				(draw))))
 )
+
 ;;a cross shifting
 (define cross 
 	(+

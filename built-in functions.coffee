@@ -134,13 +134,22 @@
 			type: 'graph'
 			value: [
 				pos: []
+				rotation: 
+					angle: 0
 				draw: ->
 					if @pos.length
+						canvas.save()
+						canvas.translate(
+							rx @pos[0]+(x[0].value.x+x[1].value.x)/2
+							ry @pos[1]+(x[0].value.y+x[1].value.y)/2							
+						)
+						canvas.rotate @rotation.angle
 						canvas.beginPath()
-						canvas.moveTo rx(@pos[0]+x[0].value.x),ry(@pos[1]+x[0].value.y)
-						canvas.lineTo rx(@pos[0]+x[1].value.x),ry(@pos[1]+x[1].value.y)
+						canvas.moveTo rx((x[0].value.x-x[1].value.x)/2),ry((x[0].value.y-x[1].value.y)/2)
+						canvas.lineTo rx((x[1].value.x-x[0].value.x)/2),ry((x[1].value.y-x[0].value.y)/2)
 						canvas.closePath()
 						canvas.stroke()
+						canvas.restore()
 			]
 	'place':
 		type: 'function'
@@ -155,6 +164,12 @@
 			x[0].value.map (f) ->
 				f.pos[0] += x[1].value.x
 				f.pos[1] += x[1].value.y				
+			type: 'undefined'
+	'rotate':
+		type: 'function'
+		fun: (x) ->
+			x[0].value.map (f) ->
+				f.rotation.angle += x[1].value
 			type: 'undefined'
 	'draw':
 		type: 'function'
