@@ -167,6 +167,27 @@
 						canvas.stroke()
 						canvas.restore()
 			]
+	'arc':
+		type: 'function'
+		fun: (x) ->
+			type: 'graph'
+			value: [
+				pos: []
+				rotation: 
+					angle: 0
+					center: [0,0]
+				draw: ->
+					if @pos.length
+						canvas.save()
+						canvas.translate @pos[0]+x[0].value.x,@pos[1]+x[0].value.y
+						canvas.translate @rotation.center[0],@rotation.center[1]
+						canvas.rotate @rotation.angle
+						canvas.translate -@rotation.center[0],-@rotation.center[1]
+						canvas.beginPath()
+						canvas.arc 0,0,x[1].value,x[2].value,x[3].value
+						canvas.stroke()
+						canvas.restore()
+			]
 	'place':
 		type: 'function'
 		fun: (x) ->

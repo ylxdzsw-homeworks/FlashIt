@@ -48,6 +48,13 @@
 
 ;;static drawing
 (begin 
+	(place
+		(arc
+			(p 10 10)
+			15
+			0
+			PI)
+		(p 25 25))
 	(place 
 		(line
 			(p 10 10)
@@ -58,6 +65,13 @@
 			(p 10 10)
 			15)
 		(p 5 5))
+	(place
+		(arc
+			(p 10 10)
+			15
+			0
+			PI)
+		(p 25 25))
 	(draw)
 )
 
