@@ -95,7 +95,7 @@
 					console.log("anime finished after "+counts+" times caculate");
 				}else{
 					console.log("one step finished");
-					x.next();
+					x.next(function(x){console.log(x)});
 					counts += 1;
 				}
 			}
@@ -109,7 +109,7 @@
 	<div>
 		<textarea id="code" cols="50"></textarea>
 	</div>
-	<div>
+	<div id="button-bar">
 		<button id="read-button">read</button>
 		<button id="full-speed-button">Full Speed</button>
 		<button id="by-frame-button">By Frame</button>

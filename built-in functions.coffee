@@ -218,7 +218,14 @@
 				x.draw()
 			onframe() if onframe?
 			type: 'undefined'
+	'erase':
+		type: 'function'
+		fun: (x) ->
+			for j in x[0].value
+				storyboard.splice i,1 for i in [0...storyboard.length] when storyboard[i] is j
 
+				
+			
 
 
 

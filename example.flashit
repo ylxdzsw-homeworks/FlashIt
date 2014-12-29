@@ -65,13 +65,6 @@
 			(p 10 10)
 			15)
 		(p 5 5))
-	(place
-		(arc
-			(p 10 10)
-			15
-			0
-			PI)
-		(p 25 25))
 	(draw)
 )
 
@@ -123,13 +116,24 @@
 )
 
 ;;a cross shifting
-(define cross 
-	(+
-		(line (p 0 0)
-			(p 50 50))
-		(line (p 50 0)
-			(p 0 50))
-		(circle (p 25 25) 25)))
- 	(place cross (p 50 50)) 
- 	(loop 100 (+ (shift cross right) (shift cross up))) 
- 	(erase cross)
+(begin
+	(define cross 
+		(g
+			(line (p 0 0)
+				(p 50 50))
+			(line (p 50 0)
+				(p 0 50))
+			(circle (p 25 25) (* 25 (sqrt 2)))))
+	(define loop
+		(lambda (n f)
+			(if (= n 0)
+				1
+				(begin
+					(f)
+					(draw)
+					(self (- n 1) f)))))
+	 	(place cross (p 0 0)) 
+	 	(loop 100 (lambda () (shift cross (p 1 1))))
+	 	(erase cross)
+	 	(draw)
+)
