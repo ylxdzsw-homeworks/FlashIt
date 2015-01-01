@@ -133,7 +133,7 @@
 			callback: callback
 
 	parse_code = (code) ->
-		parenthesis = counter()
+		parenthesis = 0
 		finalAns = []
 		codetxt = ""
 		codeToBeParse = code.trim().split('')
@@ -142,15 +142,15 @@
 		for i in codeToBeParse
 			if i is '('
 				codetxt += i
-				parenthesis.inc()
+				parenthesis += 1
 				continue
-			if parenthesis.get() > 0
+			if parenthesis > 0
 				codetxt += i
 				if i is ')'
-					if parenthesis.get() is 1
+					if parenthesis is 1
 						finalAns.push codetxt
 						codetxt = ""
-					parenthesis.dec()
+					parenthesis -= 1
 				continue
 			if i in [' ','\n','\t']
 				if codetxt isnt ""
@@ -161,7 +161,7 @@
 				codetxt += i
 			else
 				finalAns.push codetxt if codetxt isnt ""
-		if parenthesis.get() isnt 0
+		if parenthesis isnt 0
 			throw new Error("parenthesis not matched!\nError code:" + code.trim())
 		return finalAns
 
@@ -194,21 +194,6 @@
 	is_atom = (code) ->
 		x = code.trim().split('')
 		' ' not in x and '(' not in x
-
-	counter = (x) ->
-		counts = x ? 0
-		{
-			inc : () ->
-				counts += 1
-			dec : () ->
-				if counts <= 0
-					throw new Error("decreased a counter less than zero")
-				counts -= 1
-			reset : () ->
-				counts = 0
-			get : () ->
-				counts
-		}
 
 	#returns
 	{

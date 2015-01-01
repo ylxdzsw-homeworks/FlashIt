@@ -103,7 +103,32 @@
 <body>
 	<h1>Demo</h1>
 	<div>
-		<textarea id="code" cols="50"></textarea>
+		<textarea id="code" cols="50">
+(begin 
+	(define loop
+		(lambda (n f)
+			(if (= n 0)
+				1
+				(begin
+					(f)
+					(self (- n 1) f)))))
+	(define futiao
+		(g 
+			(line (p 10 10) (p 80 80))
+			(line (p 10 80) (p 80 10))))
+	(define kuang
+		(circle (p 45 45) 50))
+	(define lunzi
+		(g futiao kuang))
+	(place lunzi (p 10 10))
+	(loop 60
+		(lambda ()
+			(begin
+				(rotate futiao (* PI 0.02))
+				(shift lunzi (p 2 0))
+				(draw))))
+)
+		</textarea>
 	</div>
 	<div id="button-bar">
 		<button id="read-button">read</button>

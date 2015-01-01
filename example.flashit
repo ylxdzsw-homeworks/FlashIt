@@ -115,6 +115,44 @@
 				(draw))))
 )
 
+;;one more
+(begin
+	(define rectangle
+		(lambda (a b x y)
+			(g
+				(line (p x y)
+					(p (+ x a) y))
+				(line (p x (+ y b))
+					(p (+ x a) (+ y b)))
+				(line (p x y)
+					(p x (+ y b)))
+				(line (p (+ x a) y)
+					(p (+ x a) (+ y b))))))
+	(define loop
+		(lambda (n f)
+			(if (= n 0)
+				1
+				(begin
+					(f)
+					(self (- n 1) f)))))
+	(define left
+		(rectangle 20 20 20 20))
+	(define right
+		(rectangle 20 20 50 20))
+	(define both
+		(g left right))
+	(place both (p 0 0))
+	(draw)
+	(loop 20
+		(lambda ()
+			(begin
+				(shift left (p 0 1))
+				(shift right (p 1 0))
+				(draw))))
+	(erase both)
+	(draw)
+)
+
 ;;a cross shifting
 (begin
 	(define cross 
